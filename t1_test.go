@@ -17,6 +17,7 @@ var testParameters = []struct {
 	t             time.Time
 	result        time.Time
 }{
+
 	{pattern: "ZZZYYY", errorExpected: true},
 	{pattern: "Z1M2D$-3W3w1h-4m+5s6", errorExpected: true},
 	{pattern: "YM2D$-3h-4m+5s6", errorExpected: true},
@@ -46,13 +47,17 @@ var testParameters = []struct {
 
 	{pattern: "", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2020-06-13T14:55:22Z")},
 	{pattern: "", errorExpected: false, t: tConv("2020-06-13T14:55:21+03:00"), result: tConv("2020-06-13T14:55:21+03:00")},
-	{pattern: "", errorExpected: false, t: tConv("2020-06-13T11:55:22+03:00"), result: tConv("2020-06-13T11:55:22+03:00")},
+	{pattern: "    ", errorExpected: false, t: tConv("2020-06-13T11:55:22+03:00"), result: tConv("2020-06-13T11:55:22+03:00")},
 	{pattern: "  Y2021  ", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2021-06-13T14:55:22Z")},
 	{pattern: "  Y2021 M2 D3 h6 m20 s30", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2021-02-03T06:20:30Z")},
+	{pattern: "  Y2021 M22 D33 h66 m200 s300", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2022-11-04T21:25:00Z")},
+
+	{pattern: "  Y+1 M+22 D+33 h+66 m+200 s+300", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2023-05-19T12:20:22Z")},
+	{pattern: "Y+1M+22D+33h+66m+200s+300", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2023-05-19T12:20:22Z")},
+	{pattern: "  Y+1        M+22D+33h+66      m+200           s+300      ", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2023-05-19T12:20:22Z")},
 	{pattern: "  Y+1 M+2 D$3 h-6 m+20 s-30", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2021-08-29T09:14:52Z")},
 	{pattern: "  Y+1 M+2 D$3 W+2 h-6 m+20 s-30", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2021-09-12T09:14:52Z")},
 	{pattern: "  Y+1 M+2 D$3 W-2 h-6 m+20 s-30", errorExpected: false, t: tConv("2020-06-13T14:55:22Z"), result: tConv("2021-08-15T09:14:52Z")},
-	{pattern: "D$1", errorExpected: false, t: tConv("2000-02-13T14:55:22Z"), result: tConv("2000-02-29T14:55:22Z")},
 	{pattern: "D$1", errorExpected: false, t: tConv("2000-02-13T14:55:22Z"), result: tConv("2000-02-29T14:55:22Z")},
 	{pattern: "Y+100 D$1", errorExpected: false, t: tConv("2000-02-13T14:55:22Z"), result: tConv("2100-02-28T14:55:22Z")},
 	{pattern: "Y-100 D$1", errorExpected: false, t: tConv("2000-02-13T14:55:22Z"), result: tConv("1900-02-28T14:55:22Z")},
@@ -220,7 +225,7 @@ func benchmark(b *testing.B, cached bool) {
 
 //----------------------------------------------------------------------------------------------------------------------------//
 
-func xxxTestPrintParameters(t *testing.T) {
+func TestPrintParameters(t *testing.T) {
 	for _, p := range testParameters {
 		if !p.errorExpected {
 			fmt.Printf("|\"%s\"|%s|%s|\n", p.pattern, misc.Time2JSONtz(p.t), misc.Time2JSONtz(p.result))

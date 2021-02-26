@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -37,8 +38,9 @@ var (
 	partExpression  = `(?:\s*)([YMDWwhms])([\^\$]?)([+-]?)(\d+)(?:\s*)`
 	checkExpression = fmt.Sprintf(`^(%s)+$`, partExpression)
 
-	checkRE    = regexp.MustCompile(checkExpression)
-	splitRE    = regexp.MustCompile(partExpression)
+	checkRE = regexp.MustCompile(checkExpression)
+	splitRE = regexp.MustCompile(partExpression)
+
 	cacheMutex = new(sync.RWMutex)
 	cache      = map[string]*TimeShift{}
 )
@@ -55,6 +57,13 @@ const (
 
 // New --
 func New(pattern string, cached bool) (ts *TimeShift, err error) {
+	pattern = strings.TrimSpace(pattern)
+
+	if pattern == "" {
+		ts = &TimeShift{empty: true}
+		return
+	}
+
 	if cached {
 		cacheMutex.RLock()
 		ts = cache[pattern]
@@ -76,11 +85,6 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 			cacheMutex.Unlock()
 		}
 	}()
-
-	if pattern == "" {
-		ts.empty = true
-		return
-	}
 
 	// Common check
 	parts := checkRE.FindAllStringSubmatch(pattern, -1)
