@@ -179,7 +179,7 @@ func Test1(t *testing.T) {
 		}
 
 		if err != nil {
-			t.Errorf(`[%d] "%s" prepared with error: %v`, i, p.pattern, err)
+			t.Errorf(`[%d] "%s" prepared with error: %s`, i, p.pattern, err)
 			continue
 		}
 
@@ -212,7 +212,7 @@ func benchmark(b *testing.B, cached bool) {
 	for i := 0; i < b.N; i++ {
 		ts, err := New(pattern, cached)
 		if err != nil {
-			b.Fatalf(`[%d] "%s" prepared with error: %v`, i, pattern, err)
+			b.Fatalf(`[%d] "%s" prepared with error: %s`, i, pattern, err)
 		}
 
 		result := ts.Exec(t)
