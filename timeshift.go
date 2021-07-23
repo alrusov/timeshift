@@ -89,7 +89,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 	// Common check
 	parts := checkRE.FindAllStringSubmatch(pattern, -1)
 	if len(parts) == 0 {
-		err = fmt.Errorf(`Illegal pattern "%s"`, pattern)
+		err = fmt.Errorf(`illegal pattern "%s"`, pattern)
 		return
 	}
 
@@ -111,7 +111,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 			}
 		}
 		if nameIdx >= len(partNames) {
-			err = fmt.Errorf(`Wrong sequence of parts in "%s" (about %s), expected "%s"`, pattern, part[partSrc], partNames[:len(partNames)-1])
+			err = fmt.Errorf(`wrong sequence of parts in "%s" (about %s), expected "%s"`, pattern, part[partSrc], partNames[:len(partNames)-1])
 			return
 		}
 
@@ -140,7 +140,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 				case "W":
 					pDf.fromBegin = true
 				default:
-					err = fmt.Errorf(`Illegal option "%c" in the "%s"`, c, part[partSrc])
+					err = fmt.Errorf(`illegal option "%c" in the "%s"`, c, part[partSrc])
 					return
 				}
 			case '$':
@@ -148,7 +148,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 				case "D", "W":
 					pDf.fromEnd = true
 				default:
-					err = fmt.Errorf(`Illegal option "%c" in the "%s"`, c, part[partSrc])
+					err = fmt.Errorf(`illegal option "%c" in the "%s"`, c, part[partSrc])
 					return
 				}
 			}
@@ -170,7 +170,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 
 		case "M":
 			if pDf.absolute && pDf.val == 0 {
-				err = fmt.Errorf(`Illegal month in the "%s"`, part[partSrc])
+				err = fmt.Errorf(`illegal month in the "%s"`, part[partSrc])
 				return
 			}
 			ts.month = pDf
@@ -178,7 +178,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 		case "D":
 			if pDf.active {
 				if pDf.absolute && pDf.val == 0 {
-					err = fmt.Errorf(`Illegal day in the "%s"`, part[partSrc])
+					err = fmt.Errorf(`illegal day in the "%s"`, part[partSrc])
 					return
 				}
 			}
@@ -188,12 +188,12 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 			if pDf.active {
 				if pDf.fromBegin || pDf.fromEnd {
 					if pDf.val == 0 {
-						err = fmt.Errorf(`Illegal relative week in the "%s"`, part[partSrc])
+						err = fmt.Errorf(`illegal relative week in the "%s"`, part[partSrc])
 						return
 					}
 				} else if pDf.absolute {
 					if pDf.val == 0 {
-						err = fmt.Errorf(`Illegal absolute week in the "%s"`, part[partSrc])
+						err = fmt.Errorf(`illegal absolute week in the "%s"`, part[partSrc])
 						return
 					}
 				}
@@ -203,7 +203,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 		case "w":
 			// 0 - Sunday
 			if pDf.val < 0 || pDf.val > 6 {
-				err = fmt.Errorf(`Illegal weekday in the "%s"`, part[partSrc])
+				err = fmt.Errorf(`illegal weekday in the "%s"`, part[partSrc])
 				return
 			}
 			ts.weekday = pDf
@@ -246,7 +246,6 @@ func (ts *TimeShift) Exec(t time.Time) (result time.Time) {
 		}
 
 		*v += df.val
-		return
 	}
 
 	hour, minute, second := t.Clock()
