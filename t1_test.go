@@ -173,7 +173,7 @@ func Test1(t *testing.T) {
 
 		if p.errorExpected {
 			if err == nil {
-				t.Errorf(`[%d] "%s" prepared without error, but error expected`, i, p.pattern)
+				t.Errorf(`[%d] "%s" prepared without error, expected error`, i, p.pattern)
 			}
 			continue
 		}
@@ -187,7 +187,7 @@ func Test1(t *testing.T) {
 
 		//if !result.Equal(p.result) {
 		if result != p.result { // the locale must be saved!
-			t.Errorf(`[%d] "%s" shifted by "%s": got "%s", expected "%s" `, i, misc.Time2JSONtz(p.t), p.pattern, misc.Time2JSONtz(result), misc.Time2JSONtz(p.result))
+			t.Errorf(`[%d] "%s" shifted by "%s": got "%s", expected "%s"`, i, misc.Time2JSONtz(p.t), p.pattern, misc.Time2JSONtz(result), misc.Time2JSONtz(p.result))
 		}
 	}
 }
@@ -218,7 +218,7 @@ func benchmark(b *testing.B, cached bool) {
 		result := ts.Exec(t)
 
 		if result != expected { // the locale must be saved!
-			b.Fatalf(`[%d] "%s" shifted by "%s": got "%s", expected "%s" `, i, misc.Time2JSONtz(t), pattern, misc.Time2JSONtz(result), misc.Time2JSONtz(expected))
+			b.Fatalf(`[%d] "%s" shifted by "%s": got "%s", expected "%s"`, i, misc.Time2JSONtz(t), pattern, misc.Time2JSONtz(result), misc.Time2JSONtz(expected))
 		}
 	}
 }

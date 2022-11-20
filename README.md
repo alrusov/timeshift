@@ -17,7 +17,7 @@
 | -- | -- | -- |
 | Y | Year | Absolute: Y2021<br />Relative: Y-2, Y+1|
 | M | Month | Absolute: M12<br />Relative: M-11, M+6|
-| D | Day | Absolute: M12<br />Relative: D-12, D+6<br />From end of the month: D$2|
+| D | Day | Absolute: D15<br />Relative: D-12, D+6<br />From end of the month: D$2|
 | W | Week | **The week always starts on Sunday!**<br />Absolute from begin of the year: W52<br />Relative: W-2, W+4<br />From begin of the month: W^1<br >From end of the month: W$2 |
 | w | Weekday | w0 (Sunday), w3, w6 (Saturday)|
 | h | Hour | Absolute: h23<br />Relative: h-20, h+32|
