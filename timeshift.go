@@ -41,7 +41,7 @@ var (
 	checkRE = regexp.MustCompile(checkExpression)
 	splitRE = regexp.MustCompile(partExpression)
 
-	cacheMutex = new(sync.RWMutex)
+	cacheMutex sync.RWMutex
 	cache      = map[string]*TimeShift{}
 )
 

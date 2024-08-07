@@ -1,5 +1,5 @@
 module github.com/alrusov/timeshift
 
-go 1.19
+go 1.22.5
 
-require github.com/alrusov/misc v1.0.65
+require github.com/alrusov/misc v1.1.15
