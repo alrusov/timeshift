@@ -23,6 +23,9 @@ type (
 		hour    partDef
 		minute  partDef
 		second  partDef
+		milli   partDef
+		micro   partDef
+		nano    partDef
 	}
 
 	partDef struct {
@@ -35,7 +38,7 @@ type (
 )
 
 var (
-	partExpression  = `(?:\s*)([YMDWwhms])([\^\$]?)([+-]?)(\d+)(?:\s*)`
+	partExpression  = `(?:\s*)([YMDWwhmslun])([\^\$]?)([+-]?)(\d+)(?:\s*)`
 	checkExpression = fmt.Sprintf(`^(%s)+$`, partExpression)
 
 	checkRE = regexp.MustCompile(checkExpression)
@@ -97,7 +100,7 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 	parts = splitRE.FindAllStringSubmatch(pattern, -1)
 
 	// Parts sequence pattern
-	partNames := []byte("YMDWwhms!")
+	partNames := []byte("YMDWwhmslun!")
 	nameIdx := 0
 
 	for _, part := range parts {
@@ -216,6 +219,12 @@ func New(pattern string, cached bool) (ts *TimeShift, err error) {
 
 		case "s":
 			ts.second = pDf
+		case "l":
+			ts.milli = pDf
+		case "u":
+			ts.micro = pDf
+		case "n":
+			ts.nano = pDf
 		}
 	}
 
@@ -249,6 +258,11 @@ func (ts *TimeShift) Exec(t time.Time) (result time.Time) {
 	}
 
 	hour, minute, second := t.Clock()
+	s := t.UnixNano()
+	milli := int((s / int64(time.Millisecond)) % 1000)
+	micro := int((s / int64(time.Microsecond)) % 1000)
+	nano := int((s / int64(time.Nanosecond)) % 1000)
+
 	year, m, day := t.Date()
 	month := int(m)
 
@@ -256,11 +270,20 @@ func (ts *TimeShift) Exec(t time.Time) (result time.Time) {
 	proc(&ts.minute, &minute)
 	proc(&ts.second, &second)
 
+	proc(&ts.milli, &milli)
+	proc(&ts.micro, &micro)
+	proc(&ts.nano, &nano)
+
 	proc(&ts.year, &year)
 	proc(&ts.month, &month)
 	proc(&ts.day, &day)
 
-	result = time.Date(year, time.Month(month), day, hour, minute, second, 0, t.Location())
+	result = time.Date(
+		year, time.Month(month), day,
+		hour, minute, second,
+		milli*int(time.Millisecond)+micro*int(time.Microsecond)+nano*int(time.Nanosecond),
+		t.Location(),
+	)
 
 	if ts.day.fromEnd {
 		result = result.AddDate(0, 1, -day-ts.day.val+1)

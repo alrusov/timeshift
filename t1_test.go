@@ -17,7 +17,6 @@ var testParameters = []struct {
 	t             time.Time
 	result        time.Time
 }{
-
 	{pattern: "ZZZYYY", errorExpected: true},
 	{pattern: "Z1M2D$-3W3w1h-4m+5s6", errorExpected: true},
 	{pattern: "YM2D$-3h-4m+5s6", errorExpected: true},
@@ -155,6 +154,8 @@ var testParameters = []struct {
 	{pattern: "W$4 w4", errorExpected: false, t: tConv("2021-03-20T00:00:00Z"), result: tConv("2021-03-04T00:00:00Z")},
 	{pattern: "W$4 w5", errorExpected: false, t: tConv("2021-03-20T00:00:00Z"), result: tConv("2021-03-05T00:00:00Z")},
 	{pattern: "W$4 w6", errorExpected: false, t: tConv("2021-03-20T00:00:00Z"), result: tConv("2021-03-06T00:00:00Z")},
+
+	{pattern: "l+10 u-2 n+1234", errorExpected: false, t: tConv("2021-03-20T00:00:00Z"), result: tConv("2021-03-20T00:00:00.009999234Z")},
 }
 
 func tConv(s string) time.Time {
