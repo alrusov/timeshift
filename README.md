@@ -23,6 +23,9 @@
 | h | Hour | Absolute: h23<br />Relative: h-20, h+32|
 | m | Minute | Absolute: m15<br />Relative: m-122, m+70|
 | s | Second | Absolute: s0<br />Relative: s-15, s+90|
+| l | Millisecond | Absolute: l0<br />Relative: l-15, l+90|
+| u | Microsecond | Absolute: u0<br />Relative: u-15, u+90|
+| n | Nanosecond | Absolute: n0<br />Relative: n-15, n+90|
 
 ## Options
 
@@ -136,3 +139,4 @@ Sign does not applicable for "w" (weekday)
 |"W$4 w4"|2021-03-20T00:00:00.000Z|2021-03-04T00:00:00.000Z|
 |"W$4 w5"|2021-03-20T00:00:00.000Z|2021-03-05T00:00:00.000Z|
 |"W$4 w6"|2021-03-20T00:00:00.000Z|2021-03-06T00:00:00.000Z|
+|"l+10 u-2 n+1234"|2021-03-20T00:00:00.000Z|2021-03-20T00:00:00.009999234Z|
